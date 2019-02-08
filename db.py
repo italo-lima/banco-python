@@ -8,6 +8,10 @@ engine = fabrica.conectar()
 
 Base = declarative_base()
 
+produto_pedido = Table('produto_pedido', Base.metadata,
+                       Column('produto_id', Integer, ForeignKey('produto.id')),
+                       Column('pedido_id', Integer, ForeignKey('pedido.id')))
+
 class Cliente(Base):
     __tablename__ = 'cliente'
     id = Column(Integer, primary_key=True)
@@ -26,7 +30,17 @@ class Pedido(Base):
     cliente_id = Column(Integer, ForeignKey('cliente.id'), nullable=False)
     cliente = relationship("Cliente", back_populates="pedidos") #Relacionamento entre a tabela pedido e cliente
 
+    produtos = relationship("Produto", secondary="produto_pedido", back_populates="pedido")
+
     def __repr__(self):
         return f"Pedido de número {self.id}"
+
+class Produto(Base):
+    __tablename__ = 'produto'
+    id = Column(Integer, primary_key=True)
+    descricao = Column(String(40), nullable=False)
+    valor = Column(Float, nullable=False)
+
+    pedido = relationship("Pedido", secondary="produto_pedido", back_populates="produtos")
 
 Base.metadata.create_all(engine)
