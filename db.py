@@ -43,4 +43,7 @@ class Produto(Base):
 
     pedido = relationship("Pedido", secondary="produto_pedido", back_populates="produtos")
 
+    def __repr__(self):
+        return f"Produto {self.id} ({self.descricao},{self.valor})"
+
 Base.metadata.create_all(engine)

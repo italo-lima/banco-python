@@ -131,6 +131,7 @@ while opc_menu != 0:
     elif opc_menu == 2:
         print("{:-^30}".format("Menu"))
         print("1. Inserir Produto")
+        print("2. Buscar produto ID")
         print("0. Voltar")
         print("{:-^30}".format(""))
         opc_produto = int(input("Digite a opção desejada: "))
@@ -149,6 +150,20 @@ while opc_menu != 0:
                 raise
             finally:
                 sessao.close()
+
+        elif opc_produto == 2:
+            fabrica = fabrica_conexao.ConexaoDB()
+            sessao = fabrica.criar_sessao()
+            try:
+                produto_id = int(input("Digite o id do produto"))
+                novo_produto = produto_repositorio.ProdutoRepo().listar_produto_id(produto_id, sessao)
+                print(novo_produto)
+            except:
+                sessao.rollback()
+                raise
+            finally:
+                sessao.close()
+
 
         elif opc_produto == 0:
             continue
