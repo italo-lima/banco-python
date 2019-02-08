@@ -173,6 +173,7 @@ while opc_menu != 0:
     elif opc_menu == 3:
         print("{:-^30}".format("Menu"))
         print("1. Inserir Pedido")
+        print("2. Listar pedidos")
         print("0. Voltar")
         print("{:-^30}".format(""))
         opc_pedido = int(input("Digite a opção desejada: "))
@@ -181,8 +182,19 @@ while opc_menu != 0:
             fabrica = fabrica_conexao.ConexaoDB()
             sessao = fabrica.criar_sessao()
             try:
+                lista_produtos = []
+                while True:
+                    print("1. inserir Produto")
+                    print("0. Voltar")
+                    opc_pedido_produto = int(input("Digite a opção desejada: "))
+
+                    if opc_pedido_produto == 1:
+                        id_produto = int(input("Digite o id deste produto: "))
+                        lista_produtos.append(id_produto)
+                    elif opc_pedido_produto == 0:
+                        break
                 id_cliente = int(input("Digite o id do cliente a ser relacionado com pedido"))
-                repositorio_pedido = pedido_repositorio.PedidoRepo().inserir_pedido(id_cliente, sessao)
+                repositorio_pedido = pedido_repositorio.PedidoRepo().inserir_pedido(id_cliente, sessao, lista_produtos)
                 sessao.commit()
             except:
                 sessao.rollback()
@@ -190,6 +202,18 @@ while opc_menu != 0:
             finally:
                 sessao.close()
 
+        elif opc_pedido == 2:
+            fabrica = fabrica_conexao.ConexaoDB()
+            sessao = fabrica.criar_sessao()
+            try:
+                repositorio_pedido = pedido_repositorio.PedidoRepo().listar_pedidos(sessao)
+                for i in repositorio_pedido:
+                    print(i, i.produtos)
+            except:
+                sessao.rollback()
+                raise
+            finally:
+                sessao.close()
         elif opc_pedido == 0:
             continue
         else:

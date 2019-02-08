@@ -18,7 +18,7 @@ class Cliente(Base):
     nome = Column(String(40), nullable=False)
     idade = Column(Integer, nullable=False)
 
-    pedidos = relationship("Pedido", back_populates="cliente")
+    pedidos = relationship("Pedido", back_populates="cliente", cascade="delete")
 
     def __repr__(self):
         return f"Cliente {self.id} {(self.nome,self.idade)}"
