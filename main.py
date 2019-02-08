@@ -1,5 +1,5 @@
-from repositorios import cliente_repositorio, pedido_repositorio
-from entidades import cliente
+from repositorios import cliente_repositorio, pedido_repositorio, produto_repositorio
+from entidades import cliente, produto
 from fabricas import fabrica_conexao
 
 opc_menu = 1
@@ -7,7 +7,7 @@ opc_menu = 1
 while opc_menu != 0:
     print("{:-^30}".format("Menu"))
     print("1. Cliente")
-    print("1. Produtos")
+    print("2. Produtos")
     print("3. Pedido")
     print("0. Sair")
     print("{:-^30}".format(""))
@@ -127,6 +127,33 @@ while opc_menu != 0:
 
         else:
             continue
+
+    elif opc_menu == 2:
+        print("{:-^30}".format("Menu"))
+        print("1. Inserir Produto")
+        print("0. Voltar")
+        print("{:-^30}".format(""))
+        opc_produto = int(input("Digite a opção desejada: "))
+
+        if opc_produto == 1:
+            fabrica = fabrica_conexao.ConexaoDB()
+            sessao = fabrica.criar_sessao()
+            try:
+                descricao_produto = input("Digite a descrição do produto: ")
+                valor_produto = float(input("Digite o valor do produto: "))
+                novo_produto = produto.Produto(descricao_produto, valor_produto)
+                repositorio = produto_repositorio.ProdutoRepo().inserir_produto(novo_produto, sessao)
+                sessao.commit()
+            except:
+                sessao.rollback()
+                raise
+            finally:
+                sessao.close()
+
+        elif opc_produto == 0:
+            continue
+        else:
+            print("Valor inválido!")
 
     elif opc_menu == 3:
         print("{:-^30}".format("Menu"))
