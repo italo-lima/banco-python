@@ -1,3 +1,3 @@
 # banco-python
 
-Mini Banco para gerenciamento de hospedagem de um hotel
+Mini Banco para gerenciamento de produtos 
